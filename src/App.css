@@ -1,0 +1,105 @@
+html, body {
+
+  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+  /*color: rgba(0,0,0,.87);*/
+  /*background-color: rgb(0,0,0);
+*/
+}
+.bar{
+color: rgb(255,255,255);
+}
+body{
+
+/*background-size: 1058.66px 525.45px;
+*/}
+
+#about{
+  margin-top: 290px;
+  background: #0C80CC;
+  height:320px;
+  color: white;
+
+}
+
+#home{
+  margin-top: 230px;
+}
+
+#google{
+    height:550px;
+}
+
+#features{
+  margin-top: 30px;
+}
+
+
+footer {
+  background: #16222A;
+  background: -webkit-linear-gradient(59deg, #3A6073, #16222A);
+  background: linear-gradient(59deg, #3A6073, #16222A);
+  color: white;
+  margin-top:100px;
+}
+
+
+.contain{
+  margin: 0;
+  padding:0;
+  margin-right:-50x;
+  background: url("sentinel3.jpg");
+
+  background-repeat: no-repeat;
+   background-size: cover;
+
+
+}
+
+.no-margin {
+  margin: 0;
+}
+
+.center {
+  text-align: center;
+}
+
+.mt16 {
+  margin-top: 16px;
+}
+
+@media (min-width: 992px)
+.container, .container-lg, .container-md, .container-sm {
+    max-width: 980px;
+}
+
+
+svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.controls {
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin: 1.25rem 0;
+  text-align: center;
+  transform: translateX(-50%);
+}
+
+.controls > button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  height: 2rem;
+  width: 2rem;
+  background: #ff5533;
+  color: #fff;
+  border-radius: 100%;
+  border: 0;
+}
+.controls > button:first-child {
+  margin-right: 0.25rem;
+}
