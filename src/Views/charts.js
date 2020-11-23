@@ -3,7 +3,7 @@ import { Container,Row,Col,Card } from 'react-bootstrap';
 
 import Graph from '../graph.js';
 
-import ChartsPage from '../scatter.js';
+import AreaTimeAxis from '../scatter.js';
 
 class Charts extends Component {
   render() {
@@ -13,19 +13,43 @@ class Charts extends Component {
       <div id="gas">
       <h1 className="ml-5 mt-5 mb-5"> Charts </h1>
       <Row className="ml-3 mr-3">
-      <Col lg="6">
+      <Col lg="12">
 
         <Graph />
       </Col>
 
-      <Col lg="6">
 
-      <ChartsPage />
-      
-      </Col>
 
 
       </Row>
+
+      <br></br>
+
+            <br></br>
+
+                  <br></br>
+
+                        <br></br>
+
+                              <br></br>
+
+                                    <br></br>
+
+
+
+      <Row className="ml-3 mr-3">
+
+            <Col lg="12">
+
+            <AreaTimeAxis />
+
+            </Col>
+
+
+
+      </Row>
+
+
 
    </div>
     );

@@ -13,19 +13,11 @@ class Features extends Component {
       <div id="features">
       <h1> </h1>
       <Row className="ml-3 mr-3">
-      <Col lg="4">
-       <Link to={'/state-map'}>
-      <Card className="center">
-        <Card.Img variant="top"  src={image1} />
-<Card.Footer className="text-muted">Indian State-Wise Data</Card.Footer>
 
-</Card>
-</Link>
-      </Col>
+  <Col lg="3">
+    </Col>
 
-
-
-      <Col lg="4">
+      <Col lg="3">
       <Link to={'/google'}>
 
       <Card className="center">
@@ -40,7 +32,7 @@ class Features extends Component {
 
 
 
-      <Col lg="4">
+      <Col lg="3">
       <Link to={'/charts'}>
 
       <Card className="center">
