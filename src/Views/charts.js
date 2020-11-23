@@ -5,6 +5,10 @@ import Graph from '../graph.js';
 
 import AreaTimeAxis from '../scatter.js';
 
+
+import BarChart from './bar.js'
+
+
 class Charts extends Component {
   render() {
 
@@ -25,16 +29,16 @@ class Charts extends Component {
 
       <br></br>
 
-            <br></br>
 
-                  <br></br>
+      <br></br>
 
-                        <br></br>
+      <br></br>
 
-                              <br></br>
+      <br></br>
 
-                                    <br></br>
+      <br></br>
 
+      <br></br>
 
 
       <Row className="ml-3 mr-3">
@@ -49,6 +53,30 @@ class Charts extends Component {
 
       </Row>
 
+
+      <br></br>
+
+            <br></br>
+
+                  <br></br>
+
+                        <br></br>
+
+                              <br></br>
+
+
+
+      <Row className="ml-3 mr-3">
+
+            <Col lg="12">
+
+            <BarChart />
+
+            </Col>
+
+
+
+      </Row>
 
 
    </div>

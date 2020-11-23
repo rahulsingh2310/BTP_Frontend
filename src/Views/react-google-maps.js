@@ -1,7 +1,7 @@
 import {Map, Polygon,InfoWindow,Marker, HeatMap, GoogleApiWrapper} from 'google-maps-react';
 import React from 'react'
 
-import { Container,Row,Col } from 'react-bootstrap';
+import { Container,Row,Col,Card } from 'react-bootstrap';
 
 const data = require('../test02.json');
 
@@ -10,9 +10,16 @@ export class MapContainer extends React.Component {
  constructor(props) {
     super(props);
 	 this.state = {
-    		seen: false
+    		seen: false,
+        latposition : '',
+        longposition : ''
+
   	 };
+
+      this.onMapClicked = this.onMapClicked.bind(this);
+      this.fetchPlaces = this.fetchPlaces.bind(this);
    }
+
 
     fetchPlaces(mapProps, map) {
         const {google} = mapProps;
@@ -23,6 +30,16 @@ export class MapContainer extends React.Component {
         // ...
         console.log(clickEvent.latLng.lat())
         console.log(clickEvent.latLng.lng())
+
+        var x = clickEvent.latLng.lat();
+        var y = clickEvent.latLng.lng();
+        this.setState({
+          latposition: x,
+          longposition: y
+      });
+
+
+
 //	window.alert("Selected Latitude :" + clickEvent.latLng.lat() +  "\n" + "Selected Longitude : "  + clickEvent.latLng.lng() +  "\n\n" +   "Results \n" +   "Latitude : 17.228323\n" +  "Longitude : 78.76791\n" +  "Co2 Value : 0.041603442 mol/m2\n")
 
 
@@ -32,7 +49,11 @@ export class MapContainer extends React.Component {
       }
 
 
-
+componentWillUpdate(prevProps, prevState){
+  if(prevState.latposition != this.state.latposition){
+    console.log(this.state.latposition);
+  }
+}
 
 
 
@@ -52,7 +73,7 @@ export class MapContainer extends React.Component {
 
 
 
-		console.log(data1)
+
 
 
           const gradient = [
@@ -88,7 +109,12 @@ export class MapContainer extends React.Component {
 
 
         return (
+          <Row>
+          <Col lg="9">
+
             <div id="google">
+
+
             <Map
                 style={{height: '100%', width: '100%', position: 'relative', marginLeft: '0%'}}
                 className='map'
@@ -111,10 +137,29 @@ export class MapContainer extends React.Component {
 
                 </Map>
 
-			{this.state.seen ? <h1>HI</h1>  : null}
 
+    </div>
+    </Col>
 
-            </div>
+    <Col lg="3">
+    <Card className="center">
+      <Card.Body>
+      <Card.Text>
+  Selected Latitude : {this.state.latposition}
+    </Card.Text>
+
+    <Card.Text>
+    Selected longitude : {this.state.longposition}
+  </Card.Text>
+
+      </Card.Body>
+<Card.Footer className="text-muted">Pollution Data : -------</Card.Footer>
+
+</Card>
+
+    </Col>
+    </Row>
+
         )
     }
 }
