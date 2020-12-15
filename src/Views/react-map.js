@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import { ComposableMap, Geographies, Geography,   ZoomableGroup } from 'react-simple-maps';
 import { scaleQuantile } from 'd3-scale';
 import ReactTooltip from 'react-tooltip';
 
+import axios from 'axios';
 
 import ToggleButtonGroupControlled from '../button.js';
 
@@ -41,6 +42,8 @@ const getRandomInt = () => {
   return parseInt(Math.random() * 100);
 };
 
+
+
 const geographyStyle = {
   default: {
     outline: 'none'
@@ -56,52 +59,77 @@ const geographyStyle = {
 };
 
 // will generate random heatmap data on every call
-const getHeatMapData = () => {
-  return [
-    { id: 'AP', state: 'Andhra Pradesh', value: getRandomInt() },
-    { id: 'AR', state: 'Arunachal Pradesh', value: getRandomInt() },
-    { id: 'AS', state: 'Assam', value: getRandomInt() },
-    { id: 'BR', state: 'Bihar', value: getRandomInt() },
-    { id: 'CT', state: 'Chhattisgarh', value: getRandomInt() },
-    { id: 'GA', state: 'Goa', value: 21 },
-    { id: 'GJ', state: 'Gujarat', value: 22 },
-    { id: 'HR', state: 'Haryana', value: getRandomInt() },
-    { id: 'HP', state: 'Himachal Pradesh', value: 24 },
-    { id: 'JH', state: 'Jharkhand', value: 26 },
-    { id: 'KA', state: 'Karnataka', value: 27 },
-    { id: 'KL', state: 'Kerala', value: getRandomInt() },
-    { id: 'MP', state: 'Madhya Pradesh', value: getRandomInt() },
-    { id: 'MH', state: 'Maharashtra', value: getRandomInt() },
-    { id: 'MN', state: 'Manipur', value: getRandomInt() },
-    { id: 'ML', state: 'Meghalaya', value: 59 },
-    { id: 'MZ', state: 'Mizoram', value: getRandomInt() },
-    { id: 'NL', state: 'Nagaland', value: 59 },
-    { id: 'OR', state: 'Odisha', value: 59 },
-    { id: 'PB', state: 'Punjab', value: getRandomInt() },
-    { id: 'RJ', state: 'Rajasthan', value: getRandomInt() },
-    { id: 'SK', state: 'Sikkim', value: getRandomInt() },
-    { id: 'TN', state: 'Tamil Nadu', value: getRandomInt() },
-    { id: 'TG', state: 'Telangana', value: getRandomInt() },
-    { id: 'TR', state: 'Tripura', value: 14 },
-    { id: 'UT', state: 'Uttarakhand', value: getRandomInt() },
-    { id: 'UP', state: 'Uttar Pradesh', value: 15 },
-    { id: 'WB', state: 'West Bengal', value: 17 },
-    { id: 'WB', state: 'West Bengal', value: 17 },
-    { id: 'AN', state: 'Andaman and Nicobar Islands', value: getRandomInt() },
-    { id: 'CH', state: 'Chandigarh', value: getRandomInt() },
-    { id: 'DN', state: 'Dadra and Nagar Haveli', value: 19 },
-    { id: 'DD', state: 'Daman and Diu', value: 20 },
-    { id: 'DL', state: 'Delhi', value: 59 },
-    { id: 'JK', state: 'Jammu and Kashmir', value: 25 },
-    { id: 'LA', state: 'Ladakh', value: getRandomInt() },
-    { id: 'LD', state: 'Lakshadweep', value: getRandomInt() },
-    { id: 'PY', state: 'Puducherry', value: getRandomInt() }
-  ];
-};
 
 function App() {
+
+
+  const [data1, setData1] = useState(null)
+  const fetchURL = "http://localhost:8000/gas/getValueInARange/?gas=NO2&startDate=2020-10-19&endDate=2020-10-19"
+  const getData1 = () =>
+    fetch(`${fetchURL}`)
+      .then((res) => res.json())
+  useEffect(() => {
+    getData1().then((data1) => setData1(data1.info))
+  }, [])
+
+
+  let data2 = [];
+
+const data3 = data1?.map((item) =>
+        data2 = data2.concat({state : item.State , no2_value : item.Value })
+      )
+
+console.log(data2);
+
+  const getHeatMapData = () => {
+    return [
+      { id: 'AP', state: 'Andhra Pradesh', value: getRandomInt() },
+      { id: 'AR', state: 'Arunachal Pradesh', value: getRandomInt() },
+      { id: 'AS', state: 'Assam', value: getRandomInt() },
+      { id: 'BR', state: 'Bihar', value: getRandomInt() },
+      { id: 'CT', state: 'Chhattisgarh', value: getRandomInt() },
+      { id: 'GA', state: 'Goa', value: 22 },
+      { id: 'GJ', state: 'Gujarat', value: 22 },
+      { id: 'HR', state: 'Haryana', value: getRandomInt() },
+      { id: 'HP', state: 'Himachal Pradesh', value: 24 },
+      { id: 'JH', state: 'Jharkhand', value: 26 },
+      { id: 'KA', state: 'Karnataka', value: 27 },
+      { id: 'KL', state: 'Kerala', value: getRandomInt() },
+      { id: 'MP', state: 'Madhya Pradesh', value: getRandomInt() },
+      { id: 'MH', state: 'Maharashtra', value: getRandomInt() },
+      { id: 'MN', state: 'Manipur', value: getRandomInt() },
+      { id: 'ML', state: 'Meghalaya', value: 59 },
+      { id: 'MZ', state: 'Mizoram', value: getRandomInt() },
+      { id: 'NL', state: 'Nagaland', value: 59 },
+      { id: 'OR', state: 'Odisha', value: 59 },
+      { id: 'PB', state: 'Punjab', value: getRandomInt() },
+      { id: 'RJ', state: 'Rajasthan', value: getRandomInt() },
+      { id: 'SK', state: 'Sikkim', value: getRandomInt() },
+      { id: 'TN', state: 'Tamil Nadu', value: getRandomInt() },
+      { id: 'TG', state: 'Telangana', value: getRandomInt() },
+      { id: 'TR', state: 'Tripura', value: 14 },
+      { id: 'UT', state: 'Uttarakhand', value: getRandomInt() },
+      { id: 'UP', state: 'Uttar Pradesh', value: 15 },
+      { id: 'WB', state: 'West Bengal', value: 17 },
+      { id: 'WB', state: 'West Bengal', value: 17 },
+      { id: 'AN', state: 'Andaman and Nicobar Islands', value: getRandomInt() },
+      { id: 'CH', state: 'Chandigarh', value: getRandomInt() },
+      { id: 'DN', state: 'Dadra and Nagar Haveli', value: 19 },
+      { id: 'DD', state: 'Daman and Diu', value: 20 },
+      { id: 'DL', state: 'Delhi', value: 59 },
+      { id: 'JK', state: 'Jammu and Kashmir', value: 25 },
+      { id: 'LA', state: 'Ladakh', value: getRandomInt() },
+      { id: 'LD', state: 'Lakshadweep', value: getRandomInt() },
+      { id: 'PY', state: 'Puducherry', value: getRandomInt() }
+    ];
+  };
+
+
   const [tooltipContent, setTooltipContent] = useState('');
   const [data, setData] = useState(getHeatMapData());
+
+
+
 
   const gradientData = {
     fromColor: COLOR_RANGE[0],
@@ -167,7 +195,8 @@ function App() {
           <Geographies geography={INDIA_TOPO_JSON}>
             {({ geographies }) =>
               geographies.map(geo => {
-                console.log(geo);
+
+
                 const current = data.find(s => s.id === geo.id);
                 return (
                   <Geography

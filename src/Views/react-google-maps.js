@@ -3,7 +3,7 @@ import React from 'react'
 
 import { Container,Row,Col,Card } from 'react-bootstrap';
 
-const data = require('../test02.json');
+const data = require('../delhi.json');
 
 
 export class MapContainer extends React.Component {
@@ -66,7 +66,7 @@ componentWillUpdate(prevProps, prevState){
 		for (var i = 0; i < data.length; i++){
 			var obj = data[i];
 			//console.log("Name: " + obj.latitude + ", " + obj.longitude);
-			data1 = data1.concat({ lat: obj.latitude, lng: obj.longitude, weight:obj.co2 });
+			data1 = data1.concat({ lat: obj.latitude, lng: obj.longitude, weight:obj.co2/100 });
 
 		}
 
