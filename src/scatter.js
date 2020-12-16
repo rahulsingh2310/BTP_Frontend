@@ -7,13 +7,14 @@ import TimeSeries from 'fusioncharts/fusioncharts.timeseries';
 // import ReactFC from 'react-fusioncharts';
 import ReactFC from 'react-fusioncharts';
 
+import axios from 'axios';
 
 
 
 import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
 
 import { Container,Row,Col,Card } from 'react-bootstrap';
-
+var schemadata = require('./schema.json');
 
 
 // Add core FusionCharts module and TimeSeries module as dependecies in react-fusioncharts
@@ -25,9 +26,13 @@ const dataFetch = fetch(
   'https://s3.eu-central-1.amazonaws.com/fusion.store/ft/data/area-chart-with-time-axis-data.json'
 ).then(jsonify);
 // This is the remote url to fetch the schema.
-const schemaFetch = fetch(
-  'https://s3.eu-central-1.amazonaws.com/fusion.store/ft/schema/area-chart-with-time-axis-schema.json'
+
+
+const dataFetch1 = fetch(
+  'http://localhost:8000/gas/getValueBasedOnGasState/?state=Haryana&gas=NO2'
 ).then(jsonify);
+
+var data1 = [];
 
 class AreaTimeAxis extends Component {
   constructor(props) {
@@ -49,7 +54,7 @@ class AreaTimeAxis extends Component {
           yAxis: [
             {
               plot: {
-                value: 'Daily Visitors',
+                value: 'Daily Pollution level',
                 type: 'area'
               },
               title: 'Gas Value'
@@ -67,9 +72,10 @@ class AreaTimeAxis extends Component {
   }
 
   createDataTable() {
-    Promise.all([dataFetch, schemaFetch]).then(res => {
-      const data = res[0];
-      const schema = res[1];
+    Promise.all([dataFetch]).then(res => {
+      const data = data1;
+      console.log(data1);
+      const schema = schemadata;
       // First we are creating a DataStore
       const fusionDataStore = new FusionCharts.DataStore();
       // After that we are creating a DataTable by passing our data and schema as arguments
@@ -86,6 +92,22 @@ class AreaTimeAxis extends Component {
 
   // We are creating the DataTable immidietly after the component is mounted
   componentDidMount() {
+    axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=Haryana&gas=NO2`)
+      .then(res => {
+        const persons = res.data.info;
+        console.log(persons);
+
+            	for (var i = 0; i < persons.length; i++){
+            			var obj = persons[i];
+            			//console.log("Name: " + obj.latitude + ", " + obj.longitude);
+            			data1 = data1.concat([[obj.date,obj.value]]);
+
+            		}
+                console.log(data1);
+      })
+
+
+
     this.createDataTable();
   }
 
