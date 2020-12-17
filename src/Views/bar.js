@@ -34,13 +34,14 @@ class BarChart extends Component {
       this.state = {
         no2_data: [],
         date : new Date(),
-        value : "NO2"
+        value : "NO2",
+        Gasdate : "2020-10-19"
        };
     }
 
 
 fetchapi() {
-  axios.get(`http://localhost:8000/gas/getValueInARange/?gas=${this.state.value}&startDate=2020-10-19&endDate=2020-10-19`)
+  axios.get(`http://localhost:8000/gas/getValuesForDate?gas=${this.state.value}&date=${this.state.Gasdate}`)
     .then(res => {
       const persons = res.data.info;
       console.log(res.data.info);
@@ -50,7 +51,17 @@ fetchapi() {
 
 }
 
-onChange = date => this.setState({ date })
+onChange = d => {
+
+  var datestring = d.getFullYear()  + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) ;
+
+  this.setState({ Gasdate : datestring })
+  this.fetchapi()
+
+
+}
+
+
 onClickHandler = event => {
   const value = event.target.innerHTML;
   this.setState({ value })
@@ -70,6 +81,7 @@ componentDidMount() {
 
   render () {
     console.log(this.state.no2_data);
+    console.log(this.state.Gasdate);
 //console.log('http://localhost:8000/gas/getValueInARange/?gas='+${this.state.value}+'&startDate=2020-10-19&endDate=2020-10-19');
     let data1 = [];
       for (var i = 0; i < this.state.no2_data.length; i++){
@@ -91,8 +103,8 @@ componentDidMount() {
               "caption": "States with pollution level",
               "subCaption": "In mol/m2 = mole per meter square",
               "xAxisName": "States",
-              "yAxisName": "Mol/m2",
-              "numberSuffix": "  mol/m2",
+              "yAxisName": "mMol/m2",
+              "numberSuffix": "  mmol/m2",
               "theme": "fusion"
           },
           "data": data1
@@ -129,8 +141,8 @@ componentDidMount() {
      value={this.state.date}
    />
          </Col>
-
- <p>Value: {this.state.value}</p>
+<p>Date: {this.state.Gasdate}       </p>
+ <p>   Value: {this.state.value}</p>
          </Row>
 
       <ReactFC {...chartConfigs} />
