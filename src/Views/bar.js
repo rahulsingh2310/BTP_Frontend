@@ -34,15 +34,13 @@ class BarChart extends Component {
       this.state = {
         no2_data: [],
         date : new Date(),
+        value : "NO2"
        };
     }
 
 
-onChange = date => this.setState({ date })
-
-
-  componentDidMount() {
-  axios.get(`http://localhost:8000/gas/getValueInARange/?gas=NO2&startDate=2020-10-19&endDate=2020-10-19`)
+fetchapi() {
+  axios.get(`http://localhost:8000/gas/getValueInARange/?gas=${this.state.value}&startDate=2020-10-19&endDate=2020-10-19`)
     .then(res => {
       const persons = res.data.info;
       console.log(res.data.info);
@@ -50,8 +48,21 @@ onChange = date => this.setState({ date })
       this.setState({ no2_data : persons });
     })
 
+}
+
+onChange = date => this.setState({ date })
+onClickHandler = event => {
+  const value = event.target.innerHTML;
+  this.setState({ value })
+  this.fetchapi()
+
+}
 
 
+
+componentDidMount() {
+
+    this.fetchapi()
 
   }
 
@@ -59,7 +70,7 @@ onChange = date => this.setState({ date })
 
   render () {
     console.log(this.state.no2_data);
-
+//console.log('http://localhost:8000/gas/getValueInARange/?gas='+${this.state.value}+'&startDate=2020-10-19&endDate=2020-10-19');
     let data1 = [];
       for (var i = 0; i < this.state.no2_data.length; i++){
         var obj = this.state.no2_data[i];
@@ -104,11 +115,11 @@ onChange = date => this.setState({ date })
              Gases
            </MDBDropdownToggle>
            <MDBDropdownMenu basic>
-             <MDBDropdownItem>CO</MDBDropdownItem>
-             <MDBDropdownItem>NO2</MDBDropdownItem>
-             <MDBDropdownItem>SO2</MDBDropdownItem>
-             <MDBDropdownItem>CH4</MDBDropdownItem>
-             <MDBDropdownItem>O3</MDBDropdownItem>
+             <MDBDropdownItem onClick={this.onClickHandler}>CO</MDBDropdownItem>
+             <MDBDropdownItem onClick={this.onClickHandler}>NO2</MDBDropdownItem>
+             <MDBDropdownItem onClick={this.onClickHandler}>SO2</MDBDropdownItem>
+             <MDBDropdownItem onClick={this.onClickHandler}>CH4</MDBDropdownItem>
+             <MDBDropdownItem onClick={this.onClickHandler}>O3</MDBDropdownItem>
            </MDBDropdownMenu>
          </MDBDropdown>
 
@@ -119,6 +130,7 @@ onChange = date => this.setState({ date })
    />
          </Col>
 
+ <p>Value: {this.state.value}</p>
          </Row>
 
       <ReactFC {...chartConfigs} />
