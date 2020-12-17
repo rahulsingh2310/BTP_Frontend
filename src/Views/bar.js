@@ -17,14 +17,6 @@ import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from
 
 import { Container,Row,Col,Card } from 'react-bootstrap';
 
-
-
-
-
-
-
-
-
 ReactFC.fcRoot(FusionCharts, Charts, FusionTheme);
 
 
@@ -45,36 +37,29 @@ fetchapi() {
     .then(res => {
       const persons = res.data.info;
       console.log(res.data.info);
-
       this.setState({ no2_data : persons });
     })
 
 }
 
 onChange = d => {
-
   var datestring = d.getFullYear()  + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) ;
-
   this.setState({ Gasdate : datestring })
-  this.fetchapi()
-
-
 }
 
 
 onClickHandler = event => {
-  const value = event.target.innerHTML;
-  this.setState({ value })
-  this.fetchapi()
-
+  this.setState({ value: event.target.innerHTML })
 }
 
 
 
 componentDidMount() {
-
     this.fetchapi()
+  }
 
+  componentDidUpdate() {
+    this.fetchapi()
   }
 
 
@@ -82,7 +67,6 @@ componentDidMount() {
   render () {
     console.log(this.state.no2_data);
     console.log(this.state.Gasdate);
-//console.log('http://localhost:8000/gas/getValueInARange/?gas='+${this.state.value}+'&startDate=2020-10-19&endDate=2020-10-19');
     let data1 = [];
       for (var i = 0; i < this.state.no2_data.length; i++){
         var obj = this.state.no2_data[i];
@@ -124,7 +108,7 @@ componentDidMount() {
       </Col>
       <MDBDropdown>
            <MDBDropdownToggle caret color="primary">
-             Gases
+             {this.state.value}
            </MDBDropdownToggle>
            <MDBDropdownMenu basic>
              <MDBDropdownItem onClick={this.onClickHandler}>CO</MDBDropdownItem>
