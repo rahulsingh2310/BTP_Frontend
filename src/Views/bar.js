@@ -25,7 +25,7 @@ class BarChart extends Component {
       super(props);
       this.state = {
         no2_data: [],
-        date : new Date(),
+        date : new Date(2020,9,10),
         value : "NO2",
         Gasdate : "2020-10-19"
        };
@@ -36,7 +36,7 @@ fetchapi() {
   axios.get(`http://localhost:8000/gas/getValuesForDate?gas=${this.state.value}&date=${this.state.Gasdate}`)
     .then(res => {
       const persons = res.data.info;
-      console.log(res.data.info);
+    //  console.log(res.data.info);
       this.setState({ no2_data : persons });
     })
 
@@ -45,6 +45,7 @@ fetchapi() {
 onChange = d => {
   var datestring = d.getFullYear()  + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) ;
   this.setState({ Gasdate : datestring })
+  this.setState({date : d })
 }
 
 
@@ -65,8 +66,8 @@ componentDidMount() {
 
 
   render () {
-    console.log(this.state.no2_data);
-    console.log(this.state.Gasdate);
+//    console.log(this.state.no2_data);
+  //  console.log(this.state.Gasdate);
     let data1 = [];
       for (var i = 0; i < this.state.no2_data.length; i++){
         var obj = this.state.no2_data[i];
@@ -75,9 +76,9 @@ componentDidMount() {
 
       }
 
-      console.log(data1);
+//      console.log(data1);
 
-      console.log(this.state.date);
+  //    console.log(this.state.date);
       const chartConfigs = {
         type: 'column2d',
         width: 1200,
@@ -85,7 +86,7 @@ componentDidMount() {
         dataFormat: 'json',
         dataSource: {    "chart": {
               "caption": "States with pollution level",
-              "subCaption": "In mol/m2 = mole per meter square",
+              "subCaption": "In mmol/m2 = mole per meter square",
               "xAxisName": "States",
               "yAxisName": "mMol/m2",
               "numberSuffix": "  mmol/m2",

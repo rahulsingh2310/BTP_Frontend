@@ -3,9 +3,20 @@ import FusionCharts from "fusioncharts";
 import TimeSeries from "fusioncharts/fusioncharts.timeseries";
 import ReactFC from 'react-fusioncharts';
 
-import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
+
+import axios from 'axios';
+
+import { MDBDropdown, MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBBtn } from "mdbreact";
 
 import { Container,Row,Col,Card } from 'react-bootstrap';
+
+var schemadata = require('./schema1.json');
+
+
+
+var data1 = [];
+var data2 = [];
+var data3 = [];
 
 
 ReactFC.fcRoot(FusionCharts, TimeSeries);
@@ -43,6 +54,10 @@ class Graph extends React.Component {
     super(props);
     this.onFetchData = this.onFetchData.bind(this);
     this.state = {
+      state1:'Haryana',
+      state2:'Assam',
+      state3:'Haryana',
+      state4:'Assam',
       timeseriesDs: {
         type: "timeseries",
         renderAt: "container",
@@ -53,14 +68,76 @@ class Graph extends React.Component {
     };
   }
 
+
+
+  fetchapi() {
+
+    axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=${this.state.state1}&gas=NO2`)
+      .then(res => {
+        const persons1 = res.data.info;
+      //  console.log(persons1);
+
+              for (var i = 0; i < persons1.length; i++){
+                  var obj1 = persons1[i];
+                  //console.log("Name: " + obj.latitude + ", " + obj.longitude);
+                  data1 = data1.concat([[obj1.date,obj1.state,obj1.value]]);
+
+                }
+                console.log(data1);
+      })
+
+      axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=${this.state.state2}&gas=NO2`)
+        .then(res => {
+          const persons2 = res.data.info;
+        //  console.log(persons);
+
+                for (var i = 0; i < persons2.length; i++){
+                    var obj2 = persons2[i];
+                    //console.log("Name: " + obj.latitude + ", " + obj.longitude);
+                    data2 = data2.concat([[obj2.date,obj2.state,obj2.value]]);
+
+                  }
+                  console.log(data2);
+
+                  data3 = [...data1, ...data2];
+
+                  console.log(data3);
+		  data1 = [];
+		  data2 = [];
+
+        })
+
+
+
+  }
+
+
   componentDidMount() {
+    this.fetchapi()
+
+
     this.onFetchData();
   }
 
+
+
+onsubm(){
+
+      this.fetchapi();
+    }
+
+  componentDidUpdate() {
+
+    this.onFetchData();
+  }
+
+
   onFetchData() {
+
     Promise.all([dataFetch, schemaFetch]).then(res => {
-      const data = res[0];
-      const schema = res[1];
+      const data = data3;
+      console.log(data);
+      const schema = schemadata;
       const fusionTable = new FusionCharts.DataStore().createDataTable(
         data,
         schema
@@ -72,6 +149,17 @@ class Graph extends React.Component {
       });
     });
   }
+
+
+onClickHandler1 = event => {
+    this.setState({ state1: event.target.innerHTML })
+  }
+
+
+onClickHandler2 = event => {
+      this.setState({ state2: event.target.innerHTML })
+    }
+
 
   render() {
     return (
@@ -94,6 +182,102 @@ class Graph extends React.Component {
              <MDBDropdownItem>O3</MDBDropdownItem>
            </MDBDropdownMenu>
          </MDBDropdown>
+
+
+         <Col>
+         <MDBDropdown>
+              <MDBDropdownToggle caret color="primary">
+                {this.state.state1}
+              </MDBDropdownToggle>
+              <MDBDropdownMenu basic>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Andhra Pradesh</MDBDropdownItem>
+
+                <MDBDropdownItem onClick={this.onClickHandler1}>Arunanchal Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Assam</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Bihar</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Chhattisgarh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Dadara & Nagar Havelli</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Goa</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Gujarat</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Haryana</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Himachal Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Jammu & Kashmir</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Jharkhand</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Karnataka</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Kerala</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Lakshadweep</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Madhya Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Maharashtra</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Manipur</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Meghalaya</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Mizoram</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Nagaland</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>NCT of Delhi</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Odisha</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Punjab</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Rajasthan</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Sikkim</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Telangana</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Tripura</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Uttar Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Uttarakhand</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>West Bengal</MDBDropdownItem>
+
+
+              </MDBDropdownMenu>
+            </MDBDropdown>
+
+         </Col>
+
+
+
+
+                  <Col>
+                  <MDBDropdown>
+                       <MDBDropdownToggle caret color="primary">
+                         {this.state.state2}
+                       </MDBDropdownToggle>
+                       <MDBDropdownMenu basic>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Andhra Pradesh</MDBDropdownItem>
+
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Arunanchal Pradesh</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Assam</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Bihar</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Chhattisgarh</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Dadara & Nagar Havelli</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Goa</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Gujarat</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Haryana</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Himachal Pradesh</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Jammu & Kashmir</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Jharkhand</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Karnataka</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Kerala</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Lakshadweep</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Madhya Pradesh</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Maharashtra</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Manipur</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Meghalaya</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Mizoram</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Nagaland</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>NCT of Delhi</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Odisha</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Punjab</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Rajasthan</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Sikkim</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Telangana</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Tripura</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Uttar Pradesh</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>Uttarakhand</MDBDropdownItem>
+                         <MDBDropdownItem onClick={this.onClickHandler2}>West Bengal</MDBDropdownItem>
+
+
+                       </MDBDropdownMenu>
+                     </MDBDropdown>
+
+                  </Col>
+
+                    <MDBBtn color="primary" onClick={this.onsubm()}>Submit</MDBBtn>
 
          </Row>
 

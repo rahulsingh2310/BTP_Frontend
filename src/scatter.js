@@ -54,7 +54,7 @@ class AreaTimeAxis extends Component {
           yAxis: [
             {
               plot: {
-                value: 'Daily Pollution level',
+                value: 'Gas Value',
                 type: 'area'
               },
               title: 'Gas Value'

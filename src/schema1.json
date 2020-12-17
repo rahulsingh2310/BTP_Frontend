@@ -5,7 +5,11 @@
     "format": "%Y-%m-%d"
   },
   {
-    "name": "Gas Value",
+    "name": "Type",
+    "type": "string"
+  },
+  {
+    "name": "Gas value",
     "type": "number"
   }
 ]
