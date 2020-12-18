@@ -53,7 +53,7 @@ export default class NavbarPage extends React.Component {
   render() {
     return (
       <Navbar type="dark" theme="primary" expand="md">
-        <NavbarBrand href="#">Pollution Measurement</NavbarBrand>
+        <NavbarBrand href="/">Pollution Measurement</NavbarBrand>
         <NavbarToggler onClick={this.toggleNavbar} />
 
         <Collapse open={this.state.collapseOpen} navbar>

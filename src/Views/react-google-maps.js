@@ -1,5 +1,6 @@
 import {Map, Polygon,InfoWindow,Marker, HeatMap, GoogleApiWrapper} from 'google-maps-react';
 import React from 'react'
+import axios from 'axios';
 
 import { Container,Row,Col,Card } from 'react-bootstrap';
 
@@ -12,7 +13,8 @@ export class MapContainer extends React.Component {
 	 this.state = {
     		seen: false,
         latposition : '',
-        longposition : ''
+        longposition : '',
+        no2_data: []
 
   	 };
 
@@ -42,9 +44,16 @@ export class MapContainer extends React.Component {
 
 //	window.alert("Selected Latitude :" + clickEvent.latLng.lat() +  "\n" + "Selected Longitude : "  + clickEvent.latLng.lng() +  "\n\n" +   "Results \n" +   "Latitude : 17.228323\n" +  "Longitude : 78.76791\n" +  "Co2 Value : 0.041603442 mol/m2\n")
 
+axios.get(`http://localhost:8000/gas/getNearest/?lat=${x}&lon=${y}&gas=NO2`)
+  .then(res => {
+    const persons = res.data.info;
+    console.log(res.data.info);
+    this.setState({ no2_data : persons });
+  })
 
 
 
+//console.log(this.state.no2_data.con);
 
       }
 
@@ -52,6 +61,9 @@ export class MapContainer extends React.Component {
 componentWillUpdate(prevProps, prevState){
   if(prevState.latposition != this.state.latposition){
     console.log(this.state.latposition);
+  }
+  if(prevState.no2_data != this.state.no2_data){
+    console.log(this.state.no2_data);
   }
 }
 
@@ -71,9 +83,9 @@ componentWillUpdate(prevProps, prevState){
 		}
 
 
+	console.log(data1);
 
-
-
+  //console.log(this.state.no2_data.con);
 
 
           const gradient = [
@@ -152,8 +164,10 @@ componentWillUpdate(prevProps, prevState){
     Selected longitude : {this.state.longposition}
   </Card.Text>
 
+
+
       </Card.Body>
-<Card.Footer className="text-muted">Pollution Data : -------</Card.Footer>
+<Card.Footer className="text-muted">Gas Value : {this.state.no2_data.con*1000} mmol/m2</Card.Footer>
 
 </Card>
 

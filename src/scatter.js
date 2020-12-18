@@ -38,6 +38,7 @@ class AreaTimeAxis extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      indianstate : 'Haryana',
       // Here timeseriesDs is the configuration object which we will pass as a prop to our ReactFC component.
       timeseriesDs: {
         type: 'timeseries',
@@ -71,10 +72,59 @@ class AreaTimeAxis extends Component {
     this.createDataTable = this.createDataTable.bind(this);
   }
 
+  onClickHandler1 = event => {
+    this.setState({ indianstate: event.target.innerHTML })
+    this.fetchapi();
+  }
+
+  fetchapi() {
+    axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=${this.state.indianstate}&gas=NO2`)
+      .then(res => {
+        const persons = res.data.info;
+        console.log(persons);
+
+        data1 = [];
+
+              for (var i = 0; i < persons.length; i++){
+                  var obj = persons[i];
+                  //console.log("Name: " + obj.latitude + ", " + obj.longitude);
+                  data1 = data1.concat([[obj.date,obj.value]]);
+
+                }
+                console.log(data1);
+                console.log(data1.length);
+		this.createDataTable();
+      })
+
+
+
+
+  }
+
+
+  // We are creating the DataTable immidietly after the component is mounted
+  componentDidMount() {
+    this.fetchapi();
+
+
+  }
+
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.indianstate !== this.state.indianstate) {
+    console.log('pokemons state has changed.');
+    this.fetchapi();
+
+  }
+}
+
+
+
   createDataTable() {
     Promise.all([dataFetch]).then(res => {
+	if(data1.length!=0){
       const data = data1;
       console.log(data1);
+      data1 = [];
       const schema = schemadata;
       // First we are creating a DataStore
       const fusionDataStore = new FusionCharts.DataStore();
@@ -87,29 +137,11 @@ class AreaTimeAxis extends Component {
       this.setState({
         timeseriesDs
       });
+	}
     });
   }
 
-  // We are creating the DataTable immidietly after the component is mounted
-  componentDidMount() {
-    axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=Haryana&gas=NO2`)
-      .then(res => {
-        const persons = res.data.info;
-        console.log(persons);
 
-            	for (var i = 0; i < persons.length; i++){
-            			var obj = persons[i];
-            			//console.log("Name: " + obj.latitude + ", " + obj.longitude);
-            			data1 = data1.concat([[obj.date,obj.value]]);
-
-            		}
-                console.log(data1);
-      })
-
-
-
-    this.createDataTable();
-  }
 
   render() {
     return (
@@ -131,6 +163,53 @@ class AreaTimeAxis extends Component {
              <MDBDropdownItem>O3</MDBDropdownItem>
            </MDBDropdownMenu>
          </MDBDropdown>
+
+         <Col>
+         <MDBDropdown>
+              <MDBDropdownToggle caret color="primary">
+                {this.state.indianstate}
+              </MDBDropdownToggle>
+              <MDBDropdownMenu basic>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Andhra Pradesh</MDBDropdownItem>
+
+                <MDBDropdownItem onClick={this.onClickHandler1}>Arunanchal Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Assam</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Bihar</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Chhattisgarh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Dadara & Nagar Havelli</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Goa</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Gujarat</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Haryana</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Himachal Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Jammu & Kashmir</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Jharkhand</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Karnataka</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Kerala</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Lakshadweep</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Madhya Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Maharashtra</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Manipur</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Meghalaya</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Mizoram</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Nagaland</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>NCT of Delhi</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Odisha</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Punjab</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Rajasthan</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Sikkim</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Telangana</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Tripura</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Uttar Pradesh</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>Uttarakhand</MDBDropdownItem>
+                <MDBDropdownItem onClick={this.onClickHandler1}>West Bengal</MDBDropdownItem>
+
+
+              </MDBDropdownMenu>
+            </MDBDropdown>
+
+         </Col>
+
+		<p>State : {this.state.indianstate}</p>
 
          </Row>
 

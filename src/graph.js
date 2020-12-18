@@ -58,6 +58,8 @@ class Graph extends React.Component {
       state2:'Assam',
       state3:'Haryana',
       state4:'Assam',
+      check:false,
+      count : 0,
       timeseriesDs: {
         type: "timeseries",
         renderAt: "container",
@@ -72,6 +74,11 @@ class Graph extends React.Component {
 
   fetchapi() {
 
+	data1 = [];
+	data2 = [];
+	data3 = [];
+
+
     axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=${this.state.state1}&gas=NO2`)
       .then(res => {
         const persons1 = res.data.info;
@@ -84,6 +91,7 @@ class Graph extends React.Component {
 
                 }
                 console.log(data1);
+
       })
 
       axios.get(`http://localhost:8000/gas/getValueBasedOnGasState/?state=${this.state.state2}&gas=NO2`)
@@ -102,9 +110,9 @@ class Graph extends React.Component {
                   data3 = [...data1, ...data2];
 
                   console.log(data3);
-		  data1 = [];
-		  data2 = [];
 
+		  this.onFetchData();
+		  
         })
 
 
@@ -116,20 +124,12 @@ class Graph extends React.Component {
     this.fetchapi()
 
 
-    this.onFetchData();
+    
   }
 
 
 
-onsubm(){
 
-      this.fetchapi();
-    }
-
-  componentDidUpdate() {
-
-    this.onFetchData();
-  }
 
 
   onFetchData() {
@@ -137,6 +137,7 @@ onsubm(){
     Promise.all([dataFetch, schemaFetch]).then(res => {
       const data = data3;
       console.log(data);
+      data3 = [];
       const schema = schemadata;
       const fusionTable = new FusionCharts.DataStore().createDataTable(
         data,
@@ -151,14 +152,41 @@ onsubm(){
   }
 
 
+
+
+componentDidUpdate(prevProps, prevState) {
+  if (prevState.check !== this.state.check) {
+    console.log('pokemons state has changed.');
+	 this.fetchapi();
+
+
+  
+	
+  }
+}
+
+
 onClickHandler1 = event => {
     this.setState({ state1: event.target.innerHTML })
+	
   }
 
 
 onClickHandler2 = event => {
       this.setState({ state2: event.target.innerHTML })
+	
     }
+
+
+onClickHandler3 = () =>{
+this.setState(prevState => ({
+  check: !prevState.check
+}));
+
+console.log(this.state.check);
+
+	this.fetchapi();
+}
 
 
   render() {
@@ -183,6 +211,9 @@ onClickHandler2 = event => {
            </MDBDropdownMenu>
          </MDBDropdown>
 
+
+<Col lg="2">
+      </Col>
 
          <Col>
          <MDBDropdown>
@@ -277,7 +308,12 @@ onClickHandler2 = event => {
 
                   </Col>
 
-                    <MDBBtn color="primary" onClick={this.onsubm()}>Submit</MDBBtn>
+
+ <MDBBtn color="primary" onClick={this.onClickHandler3}>Submit</MDBBtn>
+
+ <Col lg="4">
+      </Col>
+                   
 
          </Row>
 
